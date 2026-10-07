@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-07T15:29:40.325522+08:00",
+  "lastUpdated": "2026-10-07T16:18:58.599611+08:00",
   "stores": [
     {
       "name": "店鋪 A",
@@ -10,9 +10,9 @@
       "machines": [
         {
           "name": "2W1",
-          "status": "空機",
+          "status": "運轉中",
           "remainTime": null,
-          "lastRun": null,
+          "lastRun": 1791360138,
           "type": "washer",
           "group": 1
         },
@@ -26,9 +26,9 @@
         },
         {
           "name": "2D1",
-          "status": "運轉中",
+          "status": "空機",
           "remainTime": null,
-          "lastRun": 1791355868,
+          "lastRun": null,
           "type": "dryer",
           "group": 1
         },
@@ -60,13 +60,13 @@
           "name": "4W1",
           "status": "運轉中",
           "remainTime": null,
-          "lastRun": 1791357993,
+          "lastRun": 1791360469,
           "type": "washer",
           "group": 1
         },
         {
           "name": "4W2",
-          "status": "未知",
+          "status": "空機",
           "remainTime": null,
           "lastRun": null,
           "type": "washer",
@@ -146,9 +146,9 @@
         },
         {
           "name": "7D1",
-          "status": "運轉中",
+          "status": "空機",
           "remainTime": null,
-          "lastRun": 1791355742,
+          "lastRun": null,
           "type": "dryer",
           "group": 1
         },
@@ -178,9 +178,9 @@
         },
         {
           "name": "9W1",
-          "status": "空機",
+          "status": "運轉中",
           "remainTime": null,
-          "lastRun": null,
+          "lastRun": 1791359740,
           "type": "washer",
           "group": 1
         },
@@ -194,9 +194,9 @@
         },
         {
           "name": "9D1",
-          "status": "運轉中",
+          "status": "空機",
           "remainTime": null,
-          "lastRun": 1791353325,
+          "lastRun": null,
           "type": "dryer",
           "group": 1
         }
@@ -211,17 +211,17 @@
       "machines": [
         {
           "name": "10W1",
-          "status": "運轉中",
+          "status": "空機",
           "remainTime": null,
-          "lastRun": 1791357075,
+          "lastRun": null,
           "type": "washer",
           "group": 1
         },
         {
           "name": "10W2",
-          "status": "空機",
+          "status": "運轉中",
           "remainTime": null,
-          "lastRun": null,
+          "lastRun": 1791359736,
           "type": "washer",
           "group": 1
         },
@@ -275,17 +275,17 @@
         },
         {
           "name": "12D1",
-          "status": "空機",
+          "status": "運轉中",
           "remainTime": null,
-          "lastRun": null,
+          "lastRun": 1791358203,
           "type": "dryer",
           "group": 1
         },
         {
           "name": "13D1",
-          "status": "空機",
+          "status": "運轉中",
           "remainTime": null,
-          "lastRun": null,
+          "lastRun": 1791360553,
           "type": "dryer",
           "group": 1
         },
@@ -363,9 +363,9 @@
         },
         {
           "name": "16D1",
-          "status": "運轉中",
+          "status": "空機",
           "remainTime": null,
-          "lastRun": 1791352689,
+          "lastRun": null,
           "type": "dryer",
           "group": 1
         },
@@ -403,9 +403,9 @@
         },
         {
           "name": "18D1",
-          "status": "空機",
+          "status": "運轉中",
           "remainTime": null,
-          "lastRun": null,
+          "lastRun": 1791359186,
           "type": "dryer",
           "group": 1
         },
@@ -413,15 +413,15 @@
           "name": "18W1",
           "status": "運轉中",
           "remainTime": null,
-          "lastRun": 1791353959,
+          "lastRun": 1791359650,
           "type": "washer",
           "group": 1
         },
         {
           "name": "13W1",
-          "status": "運轉中",
+          "status": "空機",
           "remainTime": null,
-          "lastRun": 1791357218,
+          "lastRun": null,
           "type": "washer",
           "group": 1
         }
@@ -429,7 +429,7 @@
     }
   ],
   "recommendation": {
-    "text": "🟢 推薦前往「店鋪 B」，目前有 13 台洗衣機、7 台烘衣機可用！",
+    "text": "🟢 推薦前往「店鋪 B」，目前有 14 台洗衣機、5 台烘衣機可用！",
     "type": "available"
   },
   "errors": []
