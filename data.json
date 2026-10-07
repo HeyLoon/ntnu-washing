@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-07T15:15:23.263416+08:00",
+  "lastUpdated": "2026-10-07T15:29:40.325522+08:00",
   "stores": [
     {
       "name": "店鋪 A",
@@ -58,9 +58,9 @@
         },
         {
           "name": "4W1",
-          "status": "空機",
+          "status": "運轉中",
           "remainTime": null,
-          "lastRun": null,
+          "lastRun": 1791357993,
           "type": "washer",
           "group": 1
         },
@@ -259,17 +259,17 @@
         },
         {
           "name": "12W1",
-          "status": "運轉中",
+          "status": "空機",
           "remainTime": null,
-          "lastRun": 1791353649,
+          "lastRun": null,
           "type": "washer",
           "group": 1
         },
         {
           "name": "12W2",
-          "status": "運轉中",
+          "status": "空機",
           "remainTime": null,
-          "lastRun": 1791354448,
+          "lastRun": null,
           "type": "washer",
           "group": 1
         },
@@ -315,17 +315,17 @@
         },
         {
           "name": "14D1",
-          "status": "運轉中",
+          "status": "運轉結束",
           "remainTime": null,
-          "lastRun": 1791352198,
+          "lastRun": null,
           "type": "dryer",
           "group": 1
         },
         {
           "name": "15W1",
-          "status": "空機",
+          "status": "運轉中",
           "remainTime": null,
-          "lastRun": null,
+          "lastRun": 1791357695,
           "type": "washer",
           "group": 1
         },
@@ -429,7 +429,7 @@
     }
   ],
   "recommendation": {
-    "text": "🟢 推薦前往「店鋪 B」，目前有 12 台洗衣機、6 台烘衣機可用！",
+    "text": "🟢 推薦前往「店鋪 B」，目前有 13 台洗衣機、7 台烘衣機可用！",
     "type": "available"
   },
   "errors": []
