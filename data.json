@@ -1,0 +1,436 @@
+{
+  "lastUpdated": "2026-10-07T15:15:23.263416+08:00",
+  "stores": [
+    {
+      "name": "店鋪 A",
+      "code": "e2qsnj",
+      "laundryName": "國立台灣師範大學(分部)    男二舍1F-9F",
+      "address": "台北市文山區汀洲路4段88號",
+      "phone": "0800211987",
+      "machines": [
+        {
+          "name": "2W1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "2W2",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "2D1",
+          "status": "運轉中",
+          "remainTime": null,
+          "lastRun": 1791355868,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "3W1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "3W2",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "3D1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "4W1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "4W2",
+          "status": "未知",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "4D1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "5W1",
+          "status": "離線",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "5W2",
+          "status": "離線",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "5D1",
+          "status": "離線",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "6W1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "6W2",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "6D1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "7W1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "7W2",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "7D1",
+          "status": "運轉中",
+          "remainTime": null,
+          "lastRun": 1791355742,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "8W1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "8W2",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "8D1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "9W1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "9W2",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "9D1",
+          "status": "運轉中",
+          "remainTime": null,
+          "lastRun": 1791353325,
+          "type": "dryer",
+          "group": 1
+        }
+      ]
+    },
+    {
+      "name": "店鋪 B",
+      "code": "JjmsaA",
+      "laundryName": "國立台灣師範大學(分部)    男二舍10F-18F",
+      "address": "台北市文山區汀洲路4段88號",
+      "phone": "0800211987",
+      "machines": [
+        {
+          "name": "10W1",
+          "status": "運轉中",
+          "remainTime": null,
+          "lastRun": 1791357075,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "10W2",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "10D1",
+          "status": "運轉中",
+          "remainTime": null,
+          "lastRun": 1791355363,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "11W1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "11W2",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "11D1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "12W1",
+          "status": "運轉中",
+          "remainTime": null,
+          "lastRun": 1791353649,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "12W2",
+          "status": "運轉中",
+          "remainTime": null,
+          "lastRun": 1791354448,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "12D1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "13D1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "13W2",
+          "status": "運轉中",
+          "remainTime": null,
+          "lastRun": 1791356418,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "14W1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "14W2",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "14D1",
+          "status": "運轉中",
+          "remainTime": null,
+          "lastRun": 1791352198,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "15W1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "15W2",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "15D1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "16W1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "16W2",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "16D1",
+          "status": "運轉中",
+          "remainTime": null,
+          "lastRun": 1791352689,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "17W1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "17W2",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "17D1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "18W2",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "18D1",
+          "status": "空機",
+          "remainTime": null,
+          "lastRun": null,
+          "type": "dryer",
+          "group": 1
+        },
+        {
+          "name": "18W1",
+          "status": "運轉中",
+          "remainTime": null,
+          "lastRun": 1791353959,
+          "type": "washer",
+          "group": 1
+        },
+        {
+          "name": "13W1",
+          "status": "運轉中",
+          "remainTime": null,
+          "lastRun": 1791357218,
+          "type": "washer",
+          "group": 1
+        }
+      ]
+    }
+  ],
+  "recommendation": {
+    "text": "🟢 推薦前往「店鋪 B」，目前有 12 台洗衣機、6 台烘衣機可用！",
+    "type": "available"
+  },
+  "errors": []
+}

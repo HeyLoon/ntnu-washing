@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🧺 宿舍洗烘衣機即時狀態</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up { animation: fadeUp .4s ease-out both; }
+    @keyframes spin-slow { to{transform:rotate(360deg)} }
+    .spin-icon { animation: spin-slow 2s linear infinite; display: inline-block; }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50:'#eff6ff', 100:'#dbeafe', 500:'#3b82f6', 600:'#2563eb', 700:'#1d4ed8', 900:'#1e3a5f' },
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+
+  <!-- ────────── 頂部導覽 ────────── -->
+  <header class="sticky top-0 z-50 backdrop-blur bg-slate-900/80 border-b border-slate-700/50">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <h1 class="text-lg font-bold tracking-wide">🧺 宿舍洗烘衣機監控</h1>
+      <div id="update-badge" class="text-xs text-slate-400 flex items-center gap-1.5">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+        </span>
+        載入中…
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-6 space-y-6">
+
+    <!-- ────────── 推薦卡 ────────── -->
+    <section id="recommendation-card" class="hidden rounded-2xl p-5 shadow-lg border fade-up"></section>
+
+    <!-- ────────── 錯誤提示 ────────── -->
+    <section id="error-card" class="hidden rounded-2xl p-4 bg-red-900/40 border border-red-700/50 text-red-200 text-sm fade-up"></section>
+
+    <!-- ────────── 店鋪卡片容器 ────────── -->
+    <div id="stores-container" class="grid gap-6 md:grid-cols-2"></div>
+
+  </main>
+
+  <footer class="text-center text-xs text-slate-500 py-6">
+    Powered by GitHub Actions · 每 5 分鐘自動更新
+  </footer>
+
+  <script>
+    // ─── 狀態對應 ──────────────────────────────
+    const STATUS_MAP = {
+      '空機':        { color: 'emerald', icon: '✅', priority: 0 },
+      '運轉結束':    { color: 'emerald', icon: '✅', priority: 1 },
+      '運轉中':      { color: 'blue',    icon: '🔄', priority: 2 },
+      '運轉中門開啟': { color: 'amber',   icon: '⚠️', priority: 3 },
+      '故障':        { color: 'red',     icon: '🔧', priority: 4 },
+      '離線':        { color: 'gray',    icon: '⚫', priority: 5 },
+      '未知':        { color: 'gray',    icon: '❓', priority: 6 },
+    };
+
+    function statusBadge(status) {
+      const s = STATUS_MAP[status] || STATUS_MAP['未知'];
+      const bg = {
+        emerald: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+        blue:    'bg-blue-500/20 text-blue-300 border-blue-500/30',
+        amber:   'bg-amber-500/20 text-amber-300 border-amber-500/30',
+        red:     'bg-red-500/20 text-red-300 border-red-500/30',
+        gray:    'bg-slate-500/20 text-slate-400 border-slate-500/30',
+      }[s.color];
+      const spin = status === '運轉中' ? 'spin-icon' : '';
+      return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border ${bg}">
+                <span class="${spin}">${s.icon}</span> ${status}
+              </span>`;
+    }
+
+    function timeAgo(isoStr) {
+      const diff = Math.floor((Date.now() - new Date(isoStr).getTime()) / 1000);
+      if (diff < 0)   return '剛剛';
+      if (diff < 60)  return `${diff} 秒前`;
+      if (diff < 3600) return `${Math.floor(diff / 60)} 分鐘前`;
+      if (diff < 86400) return `${Math.floor(diff / 3600)} 小時前`;
+      return `${Math.floor(diff / 86400)} 天前`;
+    }
+
+    // ─── 渲染推薦卡 ─────────────────────────────
+    function renderRecommendation(rec) {
+      const card = document.getElementById('recommendation-card');
+      const theme = {
+        available:   'bg-emerald-900/40 border-emerald-600/40',
+        wait:        'bg-amber-900/40 border-amber-600/40',
+        unavailable: 'bg-red-900/40 border-red-600/40',
+      }[rec.type] || 'bg-slate-800 border-slate-600';
+      card.className = `rounded-2xl p-5 shadow-lg border fade-up ${theme}`;
+      card.innerHTML = `<p class="text-base font-semibold leading-relaxed">${rec.text}</p>`;
+      card.classList.remove('hidden');
+    }
+
+    // ─── 渲染店鋪卡片 ───────────────────────────
+    function renderStore(store, idx) {
+      const washers = store.machines.filter(m => m.type === 'washer');
+      const dryers  = store.machines.filter(m => m.type === 'dryer');
+      const others  = store.machines.filter(m => m.type === 'unknown');
+
+      const idleW = washers.filter(m => m.status === '空機' || m.status === '運轉結束').length;
+      const idleD = dryers.filter(m => m.status === '空機' || m.status === '運轉結束').length;
+
+      function machineRows(list) {
+        if (!list.length) return '<p class="text-slate-500 text-sm py-2">無機台</p>';
+        // Sort: available first, then running, then others
+        const sorted = [...list].sort((a, b) => {
+          const pa = (STATUS_MAP[a.status] || STATUS_MAP['未知']).priority;
+          const pb = (STATUS_MAP[b.status] || STATUS_MAP['未知']).priority;
+          return pa - pb;
+        });
+        return sorted.map(m => {
+          let extra = '';
+          if (m.remainTime != null && m.remainTime >= 0 && m.status === '運轉中') {
+            extra = `<span class="text-xs text-slate-400">剩餘 ${m.remainTime} 分</span>`;
+          } else if (m.lastRun && m.status === '運轉中') {
+            const d = new Date(m.lastRun * 1000);
+            extra = `<span class="text-xs text-slate-400">${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')} 啟動</span>`;
+          }
+          return `
+            <div class="flex items-center justify-between py-2 border-b border-slate-700/40 last:border-0">
+              <span class="text-sm font-medium text-slate-200">${m.name}</span>
+              <div class="flex items-center gap-3">
+                ${extra}
+                ${statusBadge(m.status)}
+              </div>
+            </div>`;
+        }).join('');
+      }
+
+      function sectionHTML(title, emoji, list) {
+        if (!list.length) return '';
+        return `
+          <div class="px-5 pt-3 pb-2">
+            <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">${emoji} ${title}</h3>
+            ${machineRows(list)}
+          </div>`;
+      }
+
+      return `
+        <div class="rounded-2xl bg-slate-800/60 border border-slate-700/50 shadow-lg overflow-hidden fade-up"
+             style="animation-delay:${idx * 100}ms">
+          <!-- 標題列 -->
+          <div class="px-5 py-4 bg-slate-800/80 border-b border-slate-700/40">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-base font-bold">${store.laundryName || store.name}</h2>
+                ${store.address ? `<p class="text-xs text-slate-400 mt-0.5">📍 ${store.address}</p>` : ''}
+              </div>
+            </div>
+            <div class="flex gap-2 mt-2">
+              <span class="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full">🫧 洗衣 ${idleW}/${washers.length} 可用</span>
+              <span class="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">🔥 烘衣 ${idleD}/${dryers.length} 可用</span>
+            </div>
+          </div>
+          ${sectionHTML('洗衣機', '🫧', washers)}
+          ${sectionHTML('烘衣機', '🔥', dryers)}
+          ${sectionHTML('其他', '❓', others)}
+        </div>`;
+    }
+
+    // ─── 主邏輯 ─────────────────────────────────
+    async function loadData() {
+      try {
+        const res = await fetch('./data.json?' + Date.now());
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        // 更新時間
+        document.getElementById('update-badge').innerHTML = `
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+          </span>
+          ${timeAgo(data.lastUpdated)} 更新`;
+
+        // 推薦
+        if (data.recommendation) renderRecommendation(data.recommendation);
+
+        // 錯誤
+        const errCard = document.getElementById('error-card');
+        if (data.errors && data.errors.length) {
+          errCard.innerHTML = '⚠️ ' + data.errors.join('<br>');
+          errCard.classList.remove('hidden');
+        } else {
+          errCard.classList.add('hidden');
+        }
+
+        // 店鋪
+        const container = document.getElementById('stores-container');
+        container.innerHTML = data.stores.map((s, i) => renderStore(s, i)).join('');
+
+      } catch (err) {
+        document.getElementById('update-badge').innerHTML =
+          `<span class="h-2 w-2 rounded-full bg-red-500"></span> 讀取失敗`;
+        console.error(err);
+      }
+    }
+
+    // 初始載入 + 每 60 秒自動刷新（前端重讀 data.json）
+    loadData();
+    setInterval(loadData, 60_000);
+  </script>
+</body>
+</html>
