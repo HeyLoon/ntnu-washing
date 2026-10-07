@@ -1,23 +1,20 @@
 #!/usr/bin/env python3
 """
 宿舍洗烘衣機監控爬蟲
-透過 iSeSA 隱藏 API (dispatch.ajax) 抓取機台狀態，產出 data.json 供前端讀取。
+透過 iSeSA 隱藏 API 抓取機台狀態，並以「樓層」為單位統整資料。
 """
 
 import json
 import random
 import re
 import sys
+import time
 from datetime import datetime, timezone, timedelta
 
 import requests
 
-# ─── 店鋪設定 ──────────────────────────────────────────────
-STORES = [
-    {"code": "e2qsnj", "label": "店鋪 A"},
-    {"code": "JjmsaA", "label": "店鋪 B"},
-]
-
+# 男二舍的兩個系統代碼
+CODES = ["e2qsnj", "JjmsaA"]
 API_URL = "http://monitor.isesa.com.tw/monitor/dispatch.ajax"
 
 HEADERS = {
@@ -34,7 +31,7 @@ HEADERS = {
 
 
 def fetch_store(code: str) -> dict:
-    """呼叫 iSeSA dispatch.ajax API，取得單一店鋪的機台資料。"""
+    """呼叫 API 取得資料"""
     payload = {
         "code": code,
         "funcName": "F_CUSTOMER",
@@ -45,17 +42,22 @@ def fetch_store(code: str) -> dict:
     resp.raise_for_status()
 
     text = resp.text
-    # API 回傳前綴帶 "while(1);" 作為 JSON hijacking 防護
     if text.startswith("while(1);"):
         text = text[len("while(1);"):]
 
     return json.loads(text)
 
 
+def extract_floor(alias: str) -> int:
+    """從機台名稱提取樓層 (例如 10W1 -> 10, 2洗1 -> 2)"""
+    match = re.search(r'^(\d+)', alias)
+    if match:
+        return int(match.group(1))
+    return 0
+
+
 def classify_machine(alias: str) -> str:
-    """根據機台名稱推斷類型：W=洗衣機, D=烘衣機。
-    例如 '2W1' → washer, '3D1' → dryer, '2洗1' → washer, '2烘1' → dryer
-    """
+    """判斷洗衣機或烘衣機"""
     alias_upper = alias.upper()
     if "W" in alias_upper or "洗" in alias:
         return "washer"
@@ -64,12 +66,8 @@ def classify_machine(alias: str) -> str:
     return "unknown"
 
 
-def normalize_machines(raw_list: list, group: int) -> list:
-    """將 API 回傳的機台陣列正規化為統一格式。
-
-    group 1: machineArray  (主要清單，用 lastRun 啟動時間)
-    group 2: machineArray2 (次要清單，用 remainTime 剩餘時間)
-    """
+def process_machines(raw_list: list, current_timestamp: float) -> list:
+    """正規化機台資料，計算 expectedEndTime (毫秒)"""
     machines = []
     for m in raw_list:
         status = "離線"
@@ -78,121 +76,76 @@ def normalize_machines(raw_list: list, group: int) -> list:
 
         alias = m.get("gaiaMachineAlias", m.get("machineName", ""))
         machine_type = classify_machine(alias)
+        floor = extract_floor(alias)
 
-        remain = m.get("remainTime")   # 分鐘 (int or None)
-        last_run = m.get("lastRun")    # UNIX timestamp (str or int or None)
+        remain = m.get("remainTime")
+        last_run = m.get("lastRun")
 
-        # lastRun 有時是字串
         if last_run is not None:
             try:
                 last_run = int(last_run)
             except (ValueError, TypeError):
                 last_run = None
 
+        expected_end_time = None
+        if status == "運轉中":
+            if machine_type == "washer" and last_run:
+                # 洗衣機預設 50 分鐘
+                expected_end_time = (last_run + 50 * 60) * 1000
+            elif machine_type == "dryer" and remain is not None:
+                # 烘衣機使用 API 給的剩餘時間計算絕對結束時間
+                expected_end_time = current_timestamp * 1000 + remain * 60 * 1000
+
         machines.append({
             "name": alias,
+            "floor": floor,
+            "type": machine_type,
             "status": status,
-            "remainTime": remain,
-            "lastRun": last_run,
-            "type": machine_type,  # washer / dryer / unknown
-            "group": group,        # 1 or 2
+            "expectedEndTime": expected_end_time,
         })
     return machines
-
-
-def generate_recommendation(stores_data: list) -> dict:
-    """根據所有店鋪的機台狀態，產生智慧推薦。"""
-    best_store = None
-    min_wait = float("inf")
-    available_now = []
-
-    for store in stores_data:
-        idle_washers = [
-            m for m in store["machines"]
-            if m["type"] == "washer" and m["status"] in ("空機", "運轉結束")
-        ]
-        idle_dryers = [
-            m for m in store["machines"]
-            if m["type"] == "dryer" and m["status"] in ("空機", "運轉結束")
-        ]
-
-        if idle_washers or idle_dryers:
-            available_now.append({
-                "store": store["name"],
-                "idleWashers": len(idle_washers),
-                "idleDryers": len(idle_dryers),
-            })
-
-        # 計算該店最快可用時間（取運轉中機台剩餘最短者）
-        running = [
-            m for m in store["machines"]
-            if m["status"] == "運轉中" and m.get("remainTime") is not None
-        ]
-        if running:
-            store_min = min(m["remainTime"] for m in running)
-            if store_min < min_wait:
-                min_wait = store_min
-                best_store = store["name"]
-
-    if available_now:
-        # 有空機 → 推薦空機最多的店
-        top = max(available_now, key=lambda x: x["idleWashers"] + x["idleDryers"])
-        return {
-            "text": f"🟢 推薦前往「{top['store']}」，"
-                    f"目前有 {top['idleWashers']} 台洗衣機、"
-                    f"{top['idleDryers']} 台烘衣機可用！",
-            "type": "available",
-        }
-    elif best_store:
-        return {
-            "text": f"🟡 目前皆無空機，最快約 {min_wait} 分鐘後，"
-                    f"「{best_store}」會有機台可用。",
-            "type": "wait",
-        }
-    else:
-        return {
-            "text": "🔴 目前無法取得即時資訊，請稍後再試。",
-            "type": "unavailable",
-        }
 
 
 def main():
     tz = timezone(timedelta(hours=8))
     now = datetime.now(tz)
-    stores_data = []
+    current_timestamp = time.time()
+    
+    all_machines = []
     errors = []
 
-    for store_cfg in STORES:
+    for code in CODES:
         try:
-            raw = fetch_store(store_cfg["code"])
+            raw = fetch_store(code)
             if not raw.get("success", False):
-                errors.append(f"{store_cfg['label']}: API 回傳失敗")
+                errors.append(f"代碼 {code}: API 回傳失敗")
                 continue
 
-            # API 回傳的資料在 jsonObj 底下
             json_obj = raw.get("jsonObj", raw)
-
-            machines = []
-            machines += normalize_machines(json_obj.get("machineArray", []), group=1)
-            machines += normalize_machines(json_obj.get("machineArray2", []), group=2)
-
-            stores_data.append({
-                "name": store_cfg["label"],
-                "code": store_cfg["code"],
-                "laundryName": json_obj.get("laundryName", store_cfg["label"]),
-                "address": json_obj.get("address", ""),
-                "phone": json_obj.get("phone", ""),
-                "machines": machines,
-            })
+            all_machines += process_machines(json_obj.get("machineArray", []), current_timestamp)
+            all_machines += process_machines(json_obj.get("machineArray2", []), current_timestamp)
         except Exception as exc:
-            errors.append(f"{store_cfg['label']}: {exc}")
+            errors.append(f"代碼 {code}: {exc}")
 
-    recommendation = generate_recommendation(stores_data)
+    # 按照樓層分組
+    floors_dict = {}
+    for m in all_machines:
+        f = m["floor"]
+        if f not in floors_dict:
+            floors_dict[f] = []
+        floors_dict[f].append(m)
+
+    floors_list = []
+    for f in sorted(floors_dict.keys()):
+        floors_list.append({
+            "floor": f,
+            "machines": floors_dict[f]
+        })
 
     output = {
         "lastUpdated": now.isoformat(),
-        "stores": stores_data,
-        "recommendation": recommendation,
+        "dormName": "男二舍",
+        "floors": floors_list,
         "errors": errors,
     }
 

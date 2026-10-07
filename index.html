@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🧺 宿舍洗烘衣機即時狀態</title>
+  <title>🧺 男二舍洗烘衣機即時狀態</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
@@ -28,7 +28,7 @@
   <!-- ────────── 頂部導覽 ────────── -->
   <header class="sticky top-0 z-50 backdrop-blur bg-slate-900/80 border-b border-slate-700/50">
     <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-      <h1 class="text-lg font-bold tracking-wide">🧺 宿舍洗烘衣機監控</h1>
+      <h1 class="text-lg font-bold tracking-wide">🧺 男二舍洗烘衣機</h1>
       <div id="update-badge" class="text-xs text-slate-400 flex items-center gap-1.5">
         <span class="relative flex h-2 w-2">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -41,19 +41,46 @@
 
   <main class="max-w-5xl mx-auto px-4 py-6 space-y-6">
 
+    <!-- ────────── 樓層選擇區 ────────── -->
+    <section class="rounded-2xl p-5 bg-slate-800/80 border border-slate-700/50 shadow-lg fade-up flex items-center gap-4">
+      <label for="user-floor" class="font-medium text-slate-200">你在幾樓？</label>
+      <select id="user-floor" class="bg-slate-900 border border-slate-600 text-white rounded px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">請選擇</option>
+        <option value="1">1 樓</option>
+        <option value="2">2 樓</option>
+        <option value="3">3 樓</option>
+        <option value="4">4 樓</option>
+        <option value="5">5 樓</option>
+        <option value="6">6 樓</option>
+        <option value="7">7 樓</option>
+        <option value="8">8 樓</option>
+        <option value="9">9 樓</option>
+        <option value="10">10 樓</option>
+        <option value="11">11 樓</option>
+        <option value="12">12 樓</option>
+        <option value="13">13 樓</option>
+        <option value="14">14 樓</option>
+        <option value="15">15 樓</option>
+        <option value="16">16 樓</option>
+        <option value="17">17 樓</option>
+        <option value="18">18 樓</option>
+      </select>
+    </section>
+
     <!-- ────────── 推薦卡 ────────── -->
     <section id="recommendation-card" class="hidden rounded-2xl p-5 shadow-lg border fade-up"></section>
 
     <!-- ────────── 錯誤提示 ────────── -->
     <section id="error-card" class="hidden rounded-2xl p-4 bg-red-900/40 border border-red-700/50 text-red-200 text-sm fade-up"></section>
 
-    <!-- ────────── 店鋪卡片容器 ────────── -->
-    <div id="stores-container" class="grid gap-6 md:grid-cols-2"></div>
+    <!-- ────────── 樓層卡片容器 ────────── -->
+    <div id="floors-container" class="grid gap-6 md:grid-cols-2"></div>
 
   </main>
 
   <footer class="text-center text-xs text-slate-500 py-6">
-    Powered by GitHub Actions · 每 5 分鐘自動更新
+    Powered by GitHub Actions · 每 5 分鐘自動更新<br/>
+    洗衣機預設顯示 50 分鐘倒數，實際時間依現場為準。
   </footer>
 
   <script>
@@ -67,6 +94,9 @@
       '離線':        { color: 'gray',    icon: '⚫', priority: 5 },
       '未知':        { color: 'gray',    icon: '❓', priority: 6 },
     };
+
+    let globalData = null; // 儲存抓到的資料
+    let countdownInterval = null;
 
     function statusBadge(status) {
       const s = STATUS_MAP[status] || STATUS_MAP['未知'];
@@ -88,96 +118,165 @@
       if (diff < 0)   return '剛剛';
       if (diff < 60)  return `${diff} 秒前`;
       if (diff < 3600) return `${Math.floor(diff / 60)} 分鐘前`;
-      if (diff < 86400) return `${Math.floor(diff / 3600)} 小時前`;
-      return `${Math.floor(diff / 86400)} 天前`;
+      return `${Math.floor(diff / 3600)} 小時前`;
     }
 
-    // ─── 渲染推薦卡 ─────────────────────────────
-    function renderRecommendation(rec) {
+    // 將毫秒轉為 mm:ss，如果是負數代表已結束
+    function formatCountdown(ms) {
+      if (ms <= 0) return "即將完成";
+      const totalSeconds = Math.floor(ms / 1000);
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    // ─── 推薦邏輯 ─────────────────────────────
+    function renderRecommendation() {
       const card = document.getElementById('recommendation-card');
-      const theme = {
-        available:   'bg-emerald-900/40 border-emerald-600/40',
-        wait:        'bg-amber-900/40 border-amber-600/40',
-        unavailable: 'bg-red-900/40 border-red-600/40',
-      }[rec.type] || 'bg-slate-800 border-slate-600';
-      card.className = `rounded-2xl p-5 shadow-lg border fade-up ${theme}`;
-      card.innerHTML = `<p class="text-base font-semibold leading-relaxed">${rec.text}</p>`;
+      const userFloorStr = document.getElementById('user-floor').value;
+      
+      if (!globalData || !globalData.floors || !userFloorStr) {
+        card.classList.add('hidden');
+        return;
+      }
+      
+      const userFloor = parseInt(userFloorStr);
+      let closestAvailable = null;
+      let minDistance = Infinity;
+      let availableInfo = null;
+
+      // 尋找有空機且距離最近的樓層
+      for (const f of globalData.floors) {
+        const idleW = f.machines.filter(m => m.type === 'washer' && (m.status === '空機' || m.status === '運轉結束')).length;
+        const idleD = f.machines.filter(m => m.type === 'dryer' && (m.status === '空機' || m.status === '運轉結束')).length;
+        
+        if (idleW > 0 || idleD > 0) {
+          const dist = Math.abs(f.floor - userFloor);
+          if (dist < minDistance) {
+            minDistance = dist;
+            closestAvailable = f.floor;
+            availableInfo = { w: idleW, d: idleD };
+          }
+        }
+      }
+
+      if (closestAvailable !== null) {
+        const distText = minDistance === 0 ? "就在您所在的樓層！" : `距離您 ${minDistance} 層樓。`;
+        card.className = `rounded-2xl p-5 shadow-lg border fade-up bg-emerald-900/40 border-emerald-600/40`;
+        card.innerHTML = `<p class="text-base font-semibold leading-relaxed">
+          🟢 推薦前往 <strong>${closestAvailable} 樓</strong> (${distText})<br/>
+          目前有 ${availableInfo.w} 台洗衣機、${availableInfo.d} 台烘衣機可用。
+        </p>`;
+      } else {
+        card.className = `rounded-2xl p-5 shadow-lg border fade-up bg-amber-900/40 border-amber-600/40`;
+        card.innerHTML = `<p class="text-base font-semibold leading-relaxed">🟡 目前整棟樓皆無空機，請稍後再試。</p>`;
+      }
       card.classList.remove('hidden');
     }
 
-    // ─── 渲染店鋪卡片 ───────────────────────────
-    function renderStore(store, idx) {
-      const washers = store.machines.filter(m => m.type === 'washer');
-      const dryers  = store.machines.filter(m => m.type === 'dryer');
-      const others  = store.machines.filter(m => m.type === 'unknown');
+    // ─── 渲染樓層卡片 ───────────────────────────
+    function renderFloors() {
+      if (!globalData || !globalData.floors) return;
 
-      const idleW = washers.filter(m => m.status === '空機' || m.status === '運轉結束').length;
-      const idleD = dryers.filter(m => m.status === '空機' || m.status === '運轉結束').length;
+      const userFloorStr = document.getElementById('user-floor').value;
+      let sortedFloors = [...globalData.floors];
 
-      function machineRows(list) {
-        if (!list.length) return '<p class="text-slate-500 text-sm py-2">無機台</p>';
-        // Sort: available first, then running, then others
-        const sorted = [...list].sort((a, b) => {
-          const pa = (STATUS_MAP[a.status] || STATUS_MAP['未知']).priority;
-          const pb = (STATUS_MAP[b.status] || STATUS_MAP['未知']).priority;
-          return pa - pb;
-        });
-        return sorted.map(m => {
-          let extra = '';
-          if (m.remainTime != null && m.remainTime >= 0 && m.status === '運轉中') {
-            extra = `<span class="text-xs text-slate-400">剩餘 ${m.remainTime} 分</span>`;
-          } else if (m.lastRun && m.status === '運轉中') {
-            const d = new Date(m.lastRun * 1000);
-            extra = `<span class="text-xs text-slate-400">${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')} 啟動</span>`;
-          }
+      // 若有選樓層，依距離排序；否則依樓層排序
+      if (userFloorStr) {
+        const userFloor = parseInt(userFloorStr);
+        sortedFloors.sort((a, b) => Math.abs(a.floor - userFloor) - Math.abs(b.floor - userFloor));
+      }
+
+      const container = document.getElementById('floors-container');
+      
+      container.innerHTML = sortedFloors.map((f, idx) => {
+        const washers = f.machines.filter(m => m.type === 'washer');
+        const dryers  = f.machines.filter(m => m.type === 'dryer');
+        const idleW = washers.filter(m => m.status === '空機' || m.status === '運轉結束').length;
+        const idleD = dryers.filter(m => m.status === '空機' || m.status === '運轉結束').length;
+
+        function machineRows(list) {
+          if (!list.length) return '<p class="text-slate-500 text-sm py-2">無機台</p>';
+          const sorted = [...list].sort((a, b) => {
+            const pa = (STATUS_MAP[a.status] || STATUS_MAP['未知']).priority;
+            const pb = (STATUS_MAP[b.status] || STATUS_MAP['未知']).priority;
+            return pa - pb;
+          });
+          return sorted.map(m => {
+            return `
+              <div class="flex items-center justify-between py-2 border-b border-slate-700/40 last:border-0">
+                <span class="text-sm font-medium text-slate-200">${m.name}</span>
+                <div class="flex items-center gap-3">
+                  <span class="text-xs text-blue-300 font-mono w-12 text-right" data-endtime="${m.expectedEndTime || ''}" data-status="${m.status}"></span>
+                  ${statusBadge(m.status)}
+                </div>
+              </div>`;
+          }).join('');
+        }
+
+        function sectionHTML(title, emoji, list) {
+          if (!list.length) return '';
           return `
-            <div class="flex items-center justify-between py-2 border-b border-slate-700/40 last:border-0">
-              <span class="text-sm font-medium text-slate-200">${m.name}</span>
-              <div class="flex items-center gap-3">
-                ${extra}
-                ${statusBadge(m.status)}
-              </div>
+            <div class="px-5 pt-3 pb-2">
+              <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">${emoji} ${title}</h3>
+              ${machineRows(list)}
             </div>`;
-        }).join('');
-      }
+        }
 
-      function sectionHTML(title, emoji, list) {
-        if (!list.length) return '';
+        const isUserFloor = userFloorStr && parseInt(userFloorStr) === f.floor;
+        const highlightStyle = isUserFloor ? "border-blue-500/50 bg-slate-800/80 shadow-blue-900/20" : "border-slate-700/50 bg-slate-800/60";
+
         return `
-          <div class="px-5 pt-3 pb-2">
-            <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">${emoji} ${title}</h3>
-            ${machineRows(list)}
-          </div>`;
-      }
-
-      return `
-        <div class="rounded-2xl bg-slate-800/60 border border-slate-700/50 shadow-lg overflow-hidden fade-up"
-             style="animation-delay:${idx * 100}ms">
-          <!-- 標題列 -->
-          <div class="px-5 py-4 bg-slate-800/80 border-b border-slate-700/40">
-            <div class="flex items-center justify-between">
-              <div>
-                <h2 class="text-base font-bold">${store.laundryName || store.name}</h2>
-                ${store.address ? `<p class="text-xs text-slate-400 mt-0.5">📍 ${store.address}</p>` : ''}
+          <div class="rounded-2xl border shadow-lg overflow-hidden fade-up ${highlightStyle}" style="animation-delay:${idx * 50}ms">
+            <div class="px-5 py-4 border-b border-slate-700/40 bg-slate-900/30">
+              <div class="flex items-center justify-between">
+                <h2 class="text-base font-bold flex items-center gap-2">
+                  ${f.floor === 0 ? '未知樓層' : `${f.floor} 樓`}
+                  ${isUserFloor ? '<span class="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full">您的位置</span>' : ''}
+                </h2>
+              </div>
+              <div class="flex gap-2 mt-2">
+                <span class="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full">🫧 洗衣 ${idleW}/${washers.length} 可用</span>
+                <span class="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">🔥 烘衣 ${idleD}/${dryers.length} 可用</span>
               </div>
             </div>
-            <div class="flex gap-2 mt-2">
-              <span class="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full">🫧 洗衣 ${idleW}/${washers.length} 可用</span>
-              <span class="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">🔥 烘衣 ${idleD}/${dryers.length} 可用</span>
-            </div>
-          </div>
-          ${sectionHTML('洗衣機', '🫧', washers)}
-          ${sectionHTML('烘衣機', '🔥', dryers)}
-          ${sectionHTML('其他', '❓', others)}
-        </div>`;
+            ${sectionHTML('洗衣機', '🫧', washers)}
+            ${sectionHTML('烘衣機', '🔥', dryers)}
+          </div>`;
+      }).join('');
+
+      updateCountdowns();
     }
 
-    // ─── 主邏輯 ─────────────────────────────────
+    // ─── 倒數計時更新 ───────────────────────────
+    function updateCountdowns() {
+      const now = Date.now();
+      document.querySelectorAll('[data-endtime]').forEach(el => {
+        const endTime = el.getAttribute('data-endtime');
+        const status = el.getAttribute('data-status');
+        
+        if (status === '運轉中' && endTime && endTime !== 'null') {
+          const remainMs = parseInt(endTime) - now;
+          el.innerText = formatCountdown(remainMs);
+        } else {
+          el.innerText = '';
+        }
+      });
+    }
+
+    // ─── 綁定事件與資料載入 ────────────────────────
+    document.getElementById('user-floor').addEventListener('change', () => {
+      // 儲存至 localStorage，下次打開記住
+      localStorage.setItem('userFloor', document.getElementById('user-floor').value);
+      renderRecommendation();
+      renderFloors();
+    });
+
     async function loadData() {
       try {
         const res = await fetch('./data.json?' + Date.now());
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
+        globalData = await res.json();
 
         // 更新時間
         document.getElementById('update-badge').innerHTML = `
@@ -185,23 +284,19 @@
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
           </span>
-          ${timeAgo(data.lastUpdated)} 更新`;
-
-        // 推薦
-        if (data.recommendation) renderRecommendation(data.recommendation);
+          ${timeAgo(globalData.lastUpdated)} 更新`;
 
         // 錯誤
         const errCard = document.getElementById('error-card');
-        if (data.errors && data.errors.length) {
-          errCard.innerHTML = '⚠️ ' + data.errors.join('<br>');
+        if (globalData.errors && globalData.errors.length) {
+          errCard.innerHTML = '⚠️ ' + globalData.errors.join('<br>');
           errCard.classList.remove('hidden');
         } else {
           errCard.classList.add('hidden');
         }
 
-        // 店鋪
-        const container = document.getElementById('stores-container');
-        container.innerHTML = data.stores.map((s, i) => renderStore(s, i)).join('');
+        renderRecommendation();
+        renderFloors();
 
       } catch (err) {
         document.getElementById('update-badge').innerHTML =
@@ -210,9 +305,18 @@
       }
     }
 
-    // 初始載入 + 每 60 秒自動刷新（前端重讀 data.json）
+    // 初始化
+    const savedFloor = localStorage.getItem('userFloor');
+    if (savedFloor) {
+      document.getElementById('user-floor').value = savedFloor;
+    }
+
     loadData();
-    setInterval(loadData, 60_000);
+    setInterval(loadData, 60_000); // 每 60 秒抓最新 data.json
+
+    if (countdownInterval) clearInterval(countdownInterval);
+    countdownInterval = setInterval(updateCountdowns, 1000); // 每秒更新倒數畫面
+
   </script>
 </body>
 </html>
