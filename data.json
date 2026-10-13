@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-13T07:11:33.683864+08:00",
+  "lastUpdated": "2026-10-13T11:35:12.420160+08:00",
   "dormName": "男二舍",
   "floors": [
     {
@@ -49,7 +49,7 @@
           "name": "3D1",
           "floor": 3,
           "type": "dryer",
-          "status": "運轉結束",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
@@ -61,8 +61,8 @@
           "name": "4W1",
           "floor": 4,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1791858796000
         },
         {
           "name": "4W2",
@@ -113,8 +113,8 @@
           "name": "6W1",
           "floor": 6,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1791864292000
         },
         {
           "name": "6W2",
@@ -179,7 +179,7 @@
           "name": "8D1",
           "floor": 8,
           "type": "dryer",
-          "status": "運轉結束",
+          "status": "運轉中",
           "expectedEndTime": null
         }
       ]
@@ -191,8 +191,8 @@
           "name": "9W1",
           "floor": 9,
           "type": "washer",
-          "status": "運轉結束",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1791863007000
         },
         {
           "name": "9W2",
@@ -205,7 +205,7 @@
           "name": "9D1",
           "floor": 9,
           "type": "dryer",
-          "status": "空機",
+          "status": "運轉中",
           "expectedEndTime": null
         }
       ]
@@ -347,8 +347,8 @@
           "name": "15W1",
           "floor": 15,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1791862738000
         },
         {
           "name": "15W2",
@@ -361,7 +361,7 @@
           "name": "15D1",
           "floor": 15,
           "type": "dryer",
-          "status": "運轉結束",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
