@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-20T07:08:45.596206+08:00",
+  "lastUpdated": "2026-10-20T09:49:10.918380+08:00",
   "dormName": "男二舍",
   "floors": [
     {
@@ -35,7 +35,7 @@
           "name": "3W1",
           "floor": 3,
           "type": "washer",
-          "status": "運轉結束",
+          "status": "空機",
           "expectedEndTime": null
         },
         {
@@ -49,7 +49,7 @@
           "name": "3D1",
           "floor": 3,
           "type": "dryer",
-          "status": "空機",
+          "status": "運轉中",
           "expectedEndTime": null
         }
       ]
@@ -68,14 +68,14 @@
           "name": "4W2",
           "floor": 4,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1792461555000
         },
         {
           "name": "4D1",
           "floor": 4,
           "type": "dryer",
-          "status": "運轉結束",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
@@ -250,8 +250,8 @@
           "name": "11W2",
           "floor": 11,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1792461101000
         },
         {
           "name": "11D1",
@@ -283,7 +283,7 @@
           "name": "12D1",
           "floor": 12,
           "type": "dryer",
-          "status": "空機",
+          "status": "運轉中",
           "expectedEndTime": null
         }
       ]
@@ -295,22 +295,22 @@
           "name": "13D1",
           "floor": 13,
           "type": "dryer",
-          "status": "運轉中",
+          "status": "空機",
           "expectedEndTime": null
         },
         {
           "name": "13W2",
           "floor": 13,
           "type": "washer",
-          "status": "運轉中",
-          "expectedEndTime": 1792450914000
+          "status": "空機",
+          "expectedEndTime": null
         },
         {
           "name": "13W1",
           "floor": 13,
           "type": "washer",
           "status": "運轉中",
-          "expectedEndTime": 1792450921000
+          "expectedEndTime": 1792462669000
         }
       ]
     },
@@ -335,7 +335,7 @@
           "name": "14D1",
           "floor": 14,
           "type": "dryer",
-          "status": "空機",
+          "status": "運轉中",
           "expectedEndTime": null
         }
       ]
@@ -387,7 +387,7 @@
           "name": "16D1",
           "floor": 16,
           "type": "dryer",
-          "status": "運轉結束",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
