@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-23T05:57:59.229209+08:00",
+  "lastUpdated": "2026-10-23T08:31:59.708595+08:00",
   "dormName": "男二舍",
   "floors": [
     {
@@ -179,7 +179,7 @@
           "name": "8D1",
           "floor": 8,
           "type": "dryer",
-          "status": "運轉結束",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
@@ -361,7 +361,7 @@
           "name": "15D1",
           "floor": 15,
           "type": "dryer",
-          "status": "運轉結束",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
