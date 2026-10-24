@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-24T13:06:46.939754+08:00",
+  "lastUpdated": "2026-10-24T17:29:56.003918+08:00",
   "dormName": "男二舍",
   "floors": [
     {
@@ -23,7 +23,7 @@
           "name": "2D1",
           "floor": 2,
           "type": "dryer",
-          "status": "運轉中",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
@@ -61,14 +61,14 @@
           "name": "4W1",
           "floor": 4,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1792836740000
         },
         {
           "name": "4W2",
           "floor": 4,
           "type": "washer",
-          "status": "空機",
+          "status": "未知",
           "expectedEndTime": null
         },
         {
@@ -113,8 +113,8 @@
           "name": "6W1",
           "floor": 6,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1792834346000
         },
         {
           "name": "6W2",
@@ -172,8 +172,8 @@
           "name": "8W2",
           "floor": 8,
           "type": "washer",
-          "status": "運轉中",
-          "expectedEndTime": 1792820028000
+          "status": "空機",
+          "expectedEndTime": null
         },
         {
           "name": "8D1",
@@ -217,15 +217,15 @@
           "name": "10W1",
           "floor": 10,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1792836503000
         },
         {
           "name": "10W2",
           "floor": 10,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1792833231000
         },
         {
           "name": "10D1",
@@ -250,14 +250,14 @@
           "name": "11W2",
           "floor": 11,
           "type": "washer",
-          "status": "運轉中",
-          "expectedEndTime": 1792820542000
+          "status": "空機",
+          "expectedEndTime": null
         },
         {
           "name": "11D1",
           "floor": 11,
           "type": "dryer",
-          "status": "運轉中",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
@@ -276,8 +276,8 @@
           "name": "12W2",
           "floor": 12,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1792835961000
         },
         {
           "name": "12D1",
@@ -303,13 +303,13 @@
           "floor": 13,
           "type": "washer",
           "status": "運轉中",
-          "expectedEndTime": 1792815365000
+          "expectedEndTime": 1792836212000
         },
         {
           "name": "13W1",
           "floor": 13,
           "type": "washer",
-          "status": "空機",
+          "status": "運轉結束",
           "expectedEndTime": null
         }
       ]
@@ -321,8 +321,8 @@
           "name": "14W1",
           "floor": 14,
           "type": "washer",
-          "status": "運轉中",
-          "expectedEndTime": 1792817827000
+          "status": "空機",
+          "expectedEndTime": null
         },
         {
           "name": "14W2",
@@ -354,14 +354,14 @@
           "name": "15W2",
           "floor": 15,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1792833530000
         },
         {
           "name": "15D1",
           "floor": 15,
           "type": "dryer",
-          "status": "空機",
+          "status": "運轉中",
           "expectedEndTime": null
         }
       ]
@@ -380,7 +380,7 @@
           "name": "16W2",
           "floor": 16,
           "type": "washer",
-          "status": "運轉結束",
+          "status": "空機",
           "expectedEndTime": null
         },
         {
@@ -407,7 +407,7 @@
           "floor": 17,
           "type": "washer",
           "status": "運轉中",
-          "expectedEndTime": 1792820596000
+          "expectedEndTime": 1792830318000
         },
         {
           "name": "17D1",
