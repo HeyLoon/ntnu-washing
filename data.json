@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-24T06:14:00.412328+08:00",
+  "lastUpdated": "2026-10-24T08:46:14.296167+08:00",
   "dormName": "男二舍",
   "floors": [
     {
@@ -231,7 +231,7 @@
           "name": "10D1",
           "floor": 10,
           "type": "dryer",
-          "status": "運轉中",
+          "status": "運轉結束",
           "expectedEndTime": null
         }
       ]
