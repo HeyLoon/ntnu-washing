@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-25T07:44:50.763133+08:00",
+  "lastUpdated": "2026-10-25T09:44:57.644701+08:00",
   "dormName": "男二舍",
   "floors": [
     {
@@ -61,8 +61,8 @@
           "name": "4W1",
           "floor": 4,
           "type": "washer",
-          "status": "運轉中",
-          "expectedEndTime": 1792887167000
+          "status": "空機",
+          "expectedEndTime": null
         },
         {
           "name": "4W2",
@@ -127,7 +127,7 @@
           "name": "6D1",
           "floor": 6,
           "type": "dryer",
-          "status": "空機",
+          "status": "運轉中",
           "expectedEndTime": null
         }
       ]
@@ -269,8 +269,8 @@
           "name": "12W1",
           "floor": 12,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1792894961000
         },
         {
           "name": "12W2",
@@ -399,7 +399,7 @@
           "name": "17W1",
           "floor": 17,
           "type": "washer",
-          "status": "空機",
+          "status": "未知",
           "expectedEndTime": null
         },
         {
