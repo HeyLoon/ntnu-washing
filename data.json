@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-29T09:03:52.205814+08:00",
+  "lastUpdated": "2026-10-29T14:59:52.422401+08:00",
   "dormName": "男二舍",
   "floors": [
     {
@@ -68,14 +68,14 @@
           "name": "4W2",
           "floor": 4,
           "type": "washer",
-          "status": "空機",
+          "status": "未知",
           "expectedEndTime": null
         },
         {
           "name": "4D1",
           "floor": 4,
           "type": "dryer",
-          "status": "空機",
+          "status": "運轉中",
           "expectedEndTime": null
         }
       ]
@@ -87,21 +87,21 @@
           "name": "5W1",
           "floor": 5,
           "type": "washer",
-          "status": "離線",
+          "status": "空機",
           "expectedEndTime": null
         },
         {
           "name": "5W2",
           "floor": 5,
           "type": "washer",
-          "status": "離線",
+          "status": "空機",
           "expectedEndTime": null
         },
         {
           "name": "5D1",
           "floor": 5,
           "type": "dryer",
-          "status": "離線",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
@@ -120,14 +120,14 @@
           "name": "6W2",
           "floor": 6,
           "type": "washer",
-          "status": "運轉中",
-          "expectedEndTime": 1793237489000
+          "status": "空機",
+          "expectedEndTime": null
         },
         {
           "name": "6D1",
           "floor": 6,
           "type": "dryer",
-          "status": "運轉中",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
@@ -153,7 +153,7 @@
           "name": "7D1",
           "floor": 7,
           "type": "dryer",
-          "status": "空機",
+          "status": "運轉中",
           "expectedEndTime": null
         }
       ]
@@ -179,7 +179,7 @@
           "name": "8D1",
           "floor": 8,
           "type": "dryer",
-          "status": "運轉結束",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
@@ -217,8 +217,8 @@
           "name": "10W1",
           "floor": 10,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1793258119000
         },
         {
           "name": "10W2",
@@ -231,7 +231,7 @@
           "name": "10D1",
           "floor": 10,
           "type": "dryer",
-          "status": "空機",
+          "status": "運轉中",
           "expectedEndTime": null
         }
       ]
@@ -276,8 +276,8 @@
           "name": "12W2",
           "floor": 12,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1793254049000
         },
         {
           "name": "12D1",
@@ -295,7 +295,7 @@
           "name": "13D1",
           "floor": 13,
           "type": "dryer",
-          "status": "運轉中",
+          "status": "空機",
           "expectedEndTime": null
         },
         {
@@ -321,8 +321,8 @@
           "name": "14W1",
           "floor": 14,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1793258839000
         },
         {
           "name": "14W2",
@@ -335,7 +335,7 @@
           "name": "14D1",
           "floor": 14,
           "type": "dryer",
-          "status": "運轉中",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
@@ -387,7 +387,7 @@
           "name": "16D1",
           "floor": 16,
           "type": "dryer",
-          "status": "空機",
+          "status": "運轉中",
           "expectedEndTime": null
         }
       ]
