@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-20T01:58:08.810118+08:00",
+  "lastUpdated": "2026-11-20T08:32:18.879164+08:00",
   "dormName": "男二舍",
   "floors": [
     {
@@ -23,7 +23,7 @@
           "name": "2D1",
           "floor": 2,
           "type": "dryer",
-          "status": "運轉中",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
@@ -35,8 +35,8 @@
           "name": "3W1",
           "floor": 3,
           "type": "washer",
-          "status": "運轉中",
-          "expectedEndTime": 1795112834000
+          "status": "空機",
+          "expectedEndTime": null
         },
         {
           "name": "3W2",
@@ -49,7 +49,7 @@
           "name": "3D1",
           "floor": 3,
           "type": "dryer",
-          "status": "空機",
+          "status": "運轉結束",
           "expectedEndTime": null
         }
       ]
@@ -75,7 +75,7 @@
           "name": "4D1",
           "floor": 4,
           "type": "dryer",
-          "status": "運轉結束",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
@@ -120,14 +120,14 @@
           "name": "6W2",
           "floor": 6,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1795134412000
         },
         {
           "name": "6D1",
           "floor": 6,
           "type": "dryer",
-          "status": "運轉中",
+          "status": "運轉結束",
           "expectedEndTime": null
         }
       ]
@@ -172,8 +172,8 @@
           "name": "8W2",
           "floor": 8,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1795136316000
         },
         {
           "name": "8D1",
@@ -243,15 +243,15 @@
           "name": "11W1",
           "floor": 11,
           "type": "washer",
-          "status": "運轉中",
-          "expectedEndTime": 1795113501000
+          "status": "空機",
+          "expectedEndTime": null
         },
         {
           "name": "11W2",
           "floor": 11,
           "type": "washer",
-          "status": "運轉中",
-          "expectedEndTime": 1795110903000
+          "status": "空機",
+          "expectedEndTime": null
         },
         {
           "name": "11D1",
@@ -283,7 +283,7 @@
           "name": "12D1",
           "floor": 12,
           "type": "dryer",
-          "status": "運轉中",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
@@ -295,7 +295,7 @@
           "name": "13D1",
           "floor": 13,
           "type": "dryer",
-          "status": "運轉中",
+          "status": "運轉結束",
           "expectedEndTime": null
         },
         {
@@ -309,8 +309,8 @@
           "name": "13W1",
           "floor": 13,
           "type": "washer",
-          "status": "空機",
-          "expectedEndTime": null
+          "status": "運轉中",
+          "expectedEndTime": 1795137390000
         }
       ]
     },
@@ -354,14 +354,14 @@
           "name": "15W2",
           "floor": 15,
           "type": "washer",
-          "status": "運轉中",
-          "expectedEndTime": 1795112046000
+          "status": "空機",
+          "expectedEndTime": null
         },
         {
           "name": "15D1",
           "floor": 15,
           "type": "dryer",
-          "status": "運轉中",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
@@ -387,7 +387,7 @@
           "name": "16D1",
           "floor": 16,
           "type": "dryer",
-          "status": "運轉中",
+          "status": "空機",
           "expectedEndTime": null
         }
       ]
@@ -399,8 +399,8 @@
           "name": "17W1",
           "floor": 17,
           "type": "washer",
-          "status": "運轉中",
-          "expectedEndTime": 1795112593000
+          "status": "空機",
+          "expectedEndTime": null
         },
         {
           "name": "17W2",
@@ -413,7 +413,7 @@
           "name": "17D1",
           "floor": 17,
           "type": "dryer",
-          "status": "運轉中",
+          "status": "運轉結束",
           "expectedEndTime": null
         }
       ]
